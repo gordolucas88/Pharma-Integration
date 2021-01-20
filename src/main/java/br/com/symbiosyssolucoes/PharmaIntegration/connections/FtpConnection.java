@@ -8,6 +8,7 @@ import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Service
 public class FtpConnection {
 
     private String server;
@@ -27,7 +28,12 @@ public class FtpConnection {
     private FTPClient ftp;
 
 
-    void open() throws IOException {
+    public void open() throws IOException {
+
+        String server = "symbiosyssolucoes.com.br";
+        int port = 21;
+        String user = "legrand";
+        String password = "@nfs32xpt#";
         ftp = new FTPClient();
 
         ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
@@ -42,11 +48,11 @@ public class FtpConnection {
         ftp.login(user, password);
     }
 
-    void close() throws IOException {
+    private void close() throws IOException {
         ftp.disconnect();
     }
 
-    public Collection<String> listFiles(String path) throws IOException {
+    private Collection<String> listFiles(String path) throws IOException {
         FTPFile[] files = ftp.listFiles(path);
 
         return Arrays.stream(files)
@@ -54,11 +60,11 @@ public class FtpConnection {
                 .collect(Collectors.toList());
     }
 
-    void putFileToPath(File file, String path) throws IOException {
+    private void putFileToPath(File file, String path) throws IOException {
         ftp.storeFile(path, new FileInputStream(file));
     }
 
-    void downloadFile(String source, String destination) throws IOException {
+    private void downloadFile(String source, String destination) throws IOException {
         FileOutputStream out = new FileOutputStream(destination);
         ftp.retrieveFile(source, out);
         out.close();

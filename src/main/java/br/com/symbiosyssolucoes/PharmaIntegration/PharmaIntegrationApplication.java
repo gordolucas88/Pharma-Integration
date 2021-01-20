@@ -20,4 +20,40 @@ public class PharmaIntegrationApplication {
 		SpringApplication.run(PharmaIntegrationApplication.class, args);
 	}
 
+	//@Override
+	public void run(String... args) throws Exception {
+		Boolean isTrue = true;
+		Scanner scanner = new Scanner(System.in);
+
+		while (isTrue) {
+			System.out.println("Qual entidade você deseja interagir?");
+			System.out.println("0 - Sair");
+			System.out.println("1 - Professor");
+			System.out.println("2 - Disciplina");
+			System.out.println("3 - Aluno");
+			System.out.println("4 - Relatorios");
+
+			int opcao = scanner.nextInt();
+
+			switch (opcao) {
+				case  1:
+					this.ftpConnection.open();
+					break;
+//				case 2:
+//					this.disciplinaService.menu(scanner);
+//					break;
+//				case 3:
+//					this.alunoService.menu(scanner);
+//					break;
+//				case 4:
+//					this.relatorioService.menu(scanner);
+//					break;
+				default:
+					isTrue = false;
+					break;
+			}
+		}
+
+	}
+
 }

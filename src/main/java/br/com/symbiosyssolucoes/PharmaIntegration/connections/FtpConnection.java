@@ -1,6 +1,9 @@
 package br.com.symbiosyssolucoes.PharmaIntegration.connections;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -11,21 +14,18 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 
-public class Ftp {
+public class FtpConnection {
 
-    private final String server;
-    private final int port;
-    private final String user;
-    private final String password;
+    private String server;
+    private int port;
+    private String user;
+    private String password;
     private FTPClient ftp;
 
-    Ftp(String server, int port, String user, String password) {
-        this.server = server;
-        this.port = port;
-        this.user = user;
-        this.password = password;
-    }
 
     void open() throws IOException {
         ftp = new FTPClient();

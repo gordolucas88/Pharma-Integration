@@ -20,8 +20,6 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    @Column(nullable = false,length = 20)
-    private String Origin;
     @Column(length = 20)
     private String CustomerCNPJ;
     @Column(nullable = false)
@@ -43,6 +41,9 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
     private List<InvoiceItem> items;
 
+    @ManyToOne
+    @JoinColumn(name = "origin_id", nullable = false)
+    private Connections connections;
 
 
 }

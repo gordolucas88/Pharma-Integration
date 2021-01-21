@@ -17,10 +17,4 @@ public class SettingsService {
         this.settingsRepository.save(settings);
     }
 
-    private Optional<Settings> listSettingsByCompanyId(Long id){
-
-        Optional<Settings> settings = Optional.ofNullable(this.settingsRepository.findByCompanyId(id));
-
-        return  settings;
-    }
 }

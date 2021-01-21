@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface InvoiceItemRepository extends JpaRepository<InvoiceItem, Long> {
 
-    List<InvoiceItem> findInvoiceItemByInvoiceId(Long id);
 }

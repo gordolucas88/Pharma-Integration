@@ -9,8 +9,5 @@ import java.util.List;
 
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
-    List<Invoice> findByOrigin(ConnectionsTypes connectionsTypes);
-    List<Invoice> findByNumber(String number);
-    List<Invoice> findByCompany(Long id);
 
 }

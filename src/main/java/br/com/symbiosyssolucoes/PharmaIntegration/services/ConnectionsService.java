@@ -14,12 +14,12 @@ import java.util.Optional;
 public class ConnectionsService {
     private ConnectionsRepository connectionsRepository;
     private AuditService auditService;
-    private ConnectionsTypes connectionsTypes;
 
-    public ConnectionsService(ConnectionsRepository connectionsRepository, AuditService auditService, ConnectionsTypes connectionsTypes){
+
+    public ConnectionsService(ConnectionsRepository connectionsRepository, AuditService auditService){
         this.connectionsRepository = connectionsRepository;
         this.auditService = auditService;
-        this.connectionsTypes = connectionsTypes;
+
 
     }
 
@@ -30,19 +30,7 @@ public class ConnectionsService {
         return connections;
     }
 
-    private Optional<List<Connections>> listConnectionsByOrigin(String origin){
 
-        Optional<List<Connections>> connections = Optional.ofNullable(this.connectionsRepository.findByOrigin(origin));
-
-        return connections;
-    }
-
-    private Optional<List<Connections>> listConnectionsByDescription(String description){
-
-        Optional<List<Connections>> connections = Optional.ofNullable(this.connectionsRepository.findByDescription(description));
-
-        return connections;
-    }
     private void insertConnections(Connections connections){
 
         this.connectionsRepository.save(connections);

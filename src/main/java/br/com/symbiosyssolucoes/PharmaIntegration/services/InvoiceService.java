@@ -30,26 +30,8 @@ public class InvoiceService {
         return  invoices;
     }
 
-    private Optional<List<Invoice>> listInvoiceByCompanyId(Long id){
 
-        Optional<List<Invoice>> invoices = Optional.ofNullable(this.invoiceRepository.findByCompany(id));
 
-        return  invoices;
-    }
-
-    private Optional<List<Invoice>> listInvoiceByNumber(String number){
-
-        Optional<List<Invoice>> invoices = Optional.ofNullable(this.invoiceRepository.findByNumber(number));
-
-        return invoices;
-    }
-
-    private Optional<List<Invoice>>  listInvoiceByOrigin(ConnectionsTypes connectionsTypes){
-
-        Optional<List<Invoice>> invoices = Optional.ofNullable(this.invoiceRepository.findByOrigin(connectionsTypes));
-        return invoices;
-
-    }
 
 
     private void insertInvoice(Invoice invoice){

@@ -4,5 +4,5 @@ import br.com.symbiosyssolucoes.PharmaIntegration.entity.PaymentTerms;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PaymentTermsRepository extends JpaRepository<PaymentTerms, Long>{
-    PaymentTerms findByInvoiceId(Long id);
+
 }

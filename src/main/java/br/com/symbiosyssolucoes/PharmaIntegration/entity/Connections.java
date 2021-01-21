@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,5 +30,6 @@ public class Connections {
     private String LocalRetPath;
 
 
-    Adicionar o relacionamento com invoice
+    @OneToMany(mappedBy = "connections", fetch = FetchType.LAZY)
+    private List<Invoice> invoices;
 }

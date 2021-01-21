@@ -22,8 +22,4 @@ public class PaymentTermsService {
         return paymentTerms;
     }
 
-    public Optional<PaymentTerms> listPaymentTermsByInvoiceId(Long id){
-        Optional<PaymentTerms> paymentTerms = Optional.ofNullable(this.paymentTermsRepository.findByInvoiceId(id));
-        return paymentTerms;
-    }
 }

@@ -29,8 +29,4 @@ public class InvoiceItemService {
         return invoiceItem;
     }
 
-    private Optional<List<InvoiceItem>> listInvoiceItemByInvoiceNumber(Long id){
-        Optional<List<InvoiceItem>> invoiceItems = Optional.ofNullable(this.invoiceItemRepository.findInvoiceItemByInvoiceId(id));
-        return invoiceItems;
-    }
 }

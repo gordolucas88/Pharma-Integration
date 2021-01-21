@@ -1,4 +1,4 @@
-package br.com.symbiosyssolucoes.PharmaIntegration.connections;
+package br.com.symbiosyssolucoes.PharmaIntegration.services;
 
 
 import lombok.AllArgsConstructor;

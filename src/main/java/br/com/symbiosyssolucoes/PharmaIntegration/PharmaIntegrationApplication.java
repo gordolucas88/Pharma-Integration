@@ -1,7 +1,7 @@
 package br.com.symbiosyssolucoes.PharmaIntegration;
 
 
-import br.com.symbiosyssolucoes.PharmaIntegration.connections.FtpConnection;
+import br.com.symbiosyssolucoes.PharmaIntegration.services.FtpConnection;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

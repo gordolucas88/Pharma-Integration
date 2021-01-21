@@ -28,4 +28,6 @@ public class Connections {
     private String LocalPedPath;
     private String LocalRetPath;
 
+
+    Adicionar o relacionamento com invoice
 }

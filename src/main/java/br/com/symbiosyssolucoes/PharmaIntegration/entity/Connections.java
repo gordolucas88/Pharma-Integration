@@ -23,8 +23,8 @@ public class Connections {
     private String Home;
     private String Login;
     private String Password;
-    private String FTPImpPath;
-    private String FTPRetPath;
+    private String FtpPedPath;
+    private String FtpRetPath;
     private String LocalImpPath;
     private String LocalPedPath;
     private String LocalRetPath;

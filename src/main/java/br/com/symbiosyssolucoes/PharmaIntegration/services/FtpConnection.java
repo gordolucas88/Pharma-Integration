@@ -10,14 +10,12 @@ import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -28,6 +26,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class FtpConnection {
 
+    @Autowired
     private ConnectionsRepository connectionsRepository;
     private FTPClient ftp;
 
@@ -50,19 +49,19 @@ public class FtpConnection {
 
             switch (opcao) {
                 case 1:
-                    this.open();
+                    this.open(1L);
                     break;
                 case 2:
                     this.close();
                     break;
                 case 3:
-                    this.listFiles("/ret/");
+                    this.listFiles(1L);
                     break;
                 case 4:
-                    this.putFileToPath(new File("/test.txt"),"/");
+                    this.putFileToPath(1L);
                     break;
                 case 5:
-                    this.downloadFile("/test.txt","C:\\Cronos\\");
+                    this.downloadFile(1L);
                     break;
                 default:
                     isTrue = false;
@@ -74,18 +73,18 @@ public class FtpConnection {
     }
 
 
-    private void open() throws IOException {
-        Long id = 1L;
+    private void open(Long id) throws IOException {
+
         Optional<Connections> optional = this.connectionsRepository.findById(id);
 
         if(optional.isPresent()){
 
             Connections connections = optional.get();
-            System.out.println(connections.toString());
-            String server = "symbiosyssolucoes.com.br";
+
+            String server = connections.getHome();
             int port = 21;
-            String user = "legrand";
-            String password = "@nfs32xpt#";
+            String user = connections.getLogin();
+            String password = connections.getPassword();
             ftp = new FTPClient();
 
             ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
@@ -112,21 +111,70 @@ public class FtpConnection {
         ftp.disconnect();
     }
 
-    private Collection<String> listFiles(String path) throws IOException {
-        FTPFile[] files = ftp.listFiles(path);
+    private List<String> listFiles(Long id) throws IOException {
 
-        return Arrays.stream(files)
-                .map(FTPFile::getName)
-                .collect(Collectors.toList());
+        Optional<Connections> optional = this.connectionsRepository.findById(id);
+        if(optional.isPresent()) {
+
+            Connections connections = optional.get();
+
+            FTPFile[] files = ftp.listFiles(connections.getFtpPedPath());
+
+            return Arrays.stream(files)
+                    .map(FTPFile::getName)
+                    .collect(Collectors.toList());
+        } else {
+          List<String> error = Collections.singletonList("Houve erro ao listar arquivos");
+            return error;
+        }
+
+
+
     }
 
-    private void putFileToPath(File file, String path) throws IOException {
-        ftp.storeFile(path, new FileInputStream(file));
-    }
+    private void putFileToPath(Long id) throws IOException {
 
-    private void downloadFile(String source, String destination) throws IOException {
-        FileOutputStream out = new FileOutputStream(destination);
-        ftp.retrieveFile(source, out);
-        out.close();
+        Optional<Connections> optional = this.connectionsRepository.findById(id);
+
+        if(optional.isPresent()) {
+            Connections connections = optional.get();
+
+            String path = connections.getFtpRetPath();
+
+            List<String> fileList = this.listFiles(id);
+
+            for (int i = 0; i < fileList.toArray().length; i++ ) {
+                File file = new File(fileList.get(i));
+                ftp.storeFile(path, new FileInputStream(file));
+            }
+
+
+        } else {
+            System.out.println("Deu erro");
+        }
+
+
+
+    }
+//private void downloadFile(String source, String destination) throws IOException {
+    private void downloadFile(Long id) throws IOException {
+
+        Optional<Connections> optional = this.connectionsRepository.findById(id);
+
+        if(optional.isPresent()){
+
+            Connections connections = optional.get();
+
+            FileOutputStream out = new FileOutputStream(connections.getLocalPedPath());
+            ftp.retrieveFile(connections.getFtpPedPath(), out);
+            out.close();
+
+        } else {
+            System.out.println("Deu erro");
+        }
+
+
+
+
     }
 }

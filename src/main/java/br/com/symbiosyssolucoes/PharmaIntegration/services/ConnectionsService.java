@@ -86,8 +86,8 @@ public class ConnectionsService {
             updatedConnections.setHome(connections.getHome());
             updatedConnections.setLogin(connections.getLogin());
             updatedConnections.setPassword(connections.getPassword());
-            updatedConnections.setFTPImpPath(connections.getFTPImpPath());
-            updatedConnections.setFTPRetPath(connections.getFTPRetPath());
+            updatedConnections.setFtpPedPath(connections.getFtpPedPath());
+            updatedConnections.setFtpRetPath(connections.getFtpRetPath());
             updatedConnections.setLocalImpPath(connections.getLocalImpPath());
             updatedConnections.setLocalPedPath(connections.getLocalPedPath());
             updatedConnections.setLocalRetPath(connections.getLocalRetPath());

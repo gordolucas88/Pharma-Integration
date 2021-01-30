@@ -3,6 +3,7 @@ package br.com.symbiosyssolucoes.PharmaIntegration;
 
 import br.com.symbiosyssolucoes.PharmaIntegration.entity.Connections;
 import br.com.symbiosyssolucoes.PharmaIntegration.services.ConnectionsService;
+import br.com.symbiosyssolucoes.PharmaIntegration.services.Files;
 import br.com.symbiosyssolucoes.PharmaIntegration.services.FtpConnection;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,10 +16,12 @@ public class PharmaIntegrationApplication implements CommandLineRunner {
 
 	private FtpConnection ftpConnection;
 	private ConnectionsService connectionsService;
+	private Files files;
 
-	public PharmaIntegrationApplication(FtpConnection ftpConnection, ConnectionsService connectionsService){
+	public PharmaIntegrationApplication(FtpConnection ftpConnection, ConnectionsService connectionsService, Files files){
 		this.ftpConnection = ftpConnection;
 		this.connectionsService = connectionsService;
+		this.files = files;
 	}
 
 	public static void main(String[] args) {
@@ -35,6 +38,7 @@ public class PharmaIntegrationApplication implements CommandLineRunner {
 			System.out.println("0 - Sair");
 			System.out.println("1 - FTP");
 			System.out.println("2 - Conexões");
+			System.out.println("3 - Arquivos");
 
 
 			int opcao = scanner.nextInt();
@@ -46,7 +50,9 @@ public class PharmaIntegrationApplication implements CommandLineRunner {
 				case 2:
 					this.connectionsService.menu(scanner);
 					break;
-
+				case 3:
+					this.files.menu(scanner);
+					break;
 				default:
 					isTrue = false;
 					break;

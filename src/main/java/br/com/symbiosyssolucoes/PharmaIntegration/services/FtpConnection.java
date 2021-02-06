@@ -11,10 +11,12 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.*;
+import java.net.SocketException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,29 +41,18 @@ public class FtpConnection {
         while (isTrue) {
             System.out.println("Qual ação você quer executar?");
             System.out.println("0 - Voltar ao menu anterior");
-            System.out.println("1 - Abrir Conexão");
-            System.out.println("2 - Fechar Conexão");
-            System.out.println("3 - Listar Arquivos");
-            System.out.println("4 - Subir Arquivos");
-            System.out.println("5 - Baixar Arquivos");
+            System.out.println("1 - Subir Arquivos");
+            System.out.println("2 - Baixar Arquivos");
+
 
             int opcao = scanner.nextInt();
 
             switch (opcao) {
                 case 1:
-                    this.open(1L);
+                    this.putFileToPath(2L);
                     break;
                 case 2:
-                    this.close();
-                    break;
-                case 3:
-                    this.listFiles(1L);
-                    break;
-                case 4:
-                    this.putFileToPath(1L);
-                    break;
-                case 5:
-                    this.downloadFile(1L);
+                    this.downloadAndRemoveFile(2L);
                     break;
                 default:
                     isTrue = false;
@@ -73,82 +64,47 @@ public class FtpConnection {
     }
 
 
-    private void open(Long id) throws IOException {
-
-        Optional<Connections> optional = this.connectionsRepository.findById(id);
-
-        if(optional.isPresent()){
-
-            Connections connections = optional.get();
-
-            String server = connections.getHome();
-            int port = 21;
-            String user = connections.getLogin();
-            String password = connections.getPassword();
-            ftp = new FTPClient();
-
-            ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
-
-            ftp.connect(server, port);
-            int reply = ftp.getReplyCode();
-            if (!FTPReply.isPositiveCompletion(reply)) {
-                ftp.disconnect();
-                throw new IOException("Exception in connecting to FTP Server");
-            }
-
-            ftp.login(user, password);
-
-        } else {
-            System.out.println("Id Passado é invalido");
-        }
 
 
 
-
-    }
-
-    private void close() throws IOException {
-        ftp.disconnect();
-    }
-
-    private List<String> listFiles(Long id) throws IOException {
-
-        Optional<Connections> optional = this.connectionsRepository.findById(id);
-        if(optional.isPresent()) {
-
-            Connections connections = optional.get();
-
-            FTPFile[] files = ftp.listFiles(connections.getFtpPedPath());
-
-            return Arrays.stream(files)
-                    .map(FTPFile::getName)
-                    .collect(Collectors.toList());
-        } else {
-          List<String> error = Collections.singletonList("Houve erro ao listar arquivos");
-            return error;
-        }
-
-
-
-    }
-
-    private void putFileToPath(Long id) throws IOException {
+    private void putFileToPath(Long id) throws SocketException, IOException {
 
         Optional<Connections> optional = this.connectionsRepository.findById(id);
 
         if(optional.isPresent()) {
             Connections connections = optional.get();
 
-            String path = connections.getFtpRetPath();
+            FTPClient ftp = new FTPClient();
 
-            List<String> fileList = this.listFiles(id);
+            ftp.connect( connections.getHome() );
 
-            for (int i = 0; i < fileList.toArray().length; i++ ) {
-                File file = new File(fileList.get(i));
-                ftp.storeFile(path, new FileInputStream(file));
+            ftp.login( connections.getLogin(), connections.getPassword() );
+
+            String sourcePath = connections.getLocalRetPath();
+            String destinationPath = connections.getFtpRetPath();
+
+            String[] fileList = new File(sourcePath).list();
+
+            for (int i = 0; i < fileList.length; i++ ) {
+
+                System.out.println(sourcePath + fileList[i]);
+               FileInputStream fileToSend = new FileInputStream(sourcePath + fileList[i]);
+
+               if(ftp.storeFile(destinationPath + fileList[i], fileToSend)){
+                   System.out.println("Arquivo armazenado com sucesso!");
+                   fileToSend.close();
+                   File fileToDelete = new File(sourcePath + fileList[i]);
+                   if(fileToDelete.delete() == true){
+                       System.out.println(fileToDelete.getName() + " Excluido");
+                   }
+               } else {
+                   System.out.println ("Erro ao armazenar o arquivo.");
+               }
+
+
             }
 
-
+            ftp.disconnect();
         } else {
             System.out.println("Deu erro");
         }
@@ -156,25 +112,51 @@ public class FtpConnection {
 
 
     }
-//private void downloadFile(String source, String destination) throws IOException {
-    private void downloadFile(Long id) throws IOException {
 
+
+
+
+    private void downloadAndRemoveFile(Long id) throws SocketException, IOException {{
         Optional<Connections> optional = this.connectionsRepository.findById(id);
 
-        if(optional.isPresent()){
-
+        if( optional.isPresent()){
             Connections connections = optional.get();
 
-            FileOutputStream out = new FileOutputStream(connections.getLocalPedPath());
-            ftp.retrieveFile(connections.getFtpPedPath(), out);
-            out.close();
+            FTPClient ftp = new FTPClient();
 
-        } else {
-            System.out.println("Deu erro");
+            ftp.connect( connections.getHome() );
+
+            ftp.login( connections.getLogin(), connections.getPassword() );
+
+            ftp.changeWorkingDirectory (connections.getFtpPedPath());
+            String[] arq = ftp.listNames();
+
+            for(int i = 0; i < arq.length; i++){
+                System.out.println(arq[i]);
+                System.out.println( connections.getLocalPedPath() + arq[i]);
+                FileOutputStream fos =
+
+                        new FileOutputStream( connections.getLocalPedPath() + arq[i] );
+
+                if (ftp.retrieveFile( arq[i], fos )) {
+                    fos.close();
+                    System.out.println("Download efetuado com sucesso!");
+                    ftp.deleteFile(arq[i]);
+                }
+                else {
+
+                    System.out.println("Erro ao efetuar download do arquivo.");
+                }
+            }
+            ftp.disconnect();
+
+
         }
 
 
 
 
+
+    }
     }
 }

@@ -30,6 +30,7 @@ public class Connections {
     private String LocalRetPath;
 
 
-    @OneToMany(mappedBy = "connections", fetch = FetchType.LAZY)
+    @OneToMany()
+
     private List<Invoice> invoices;
 }

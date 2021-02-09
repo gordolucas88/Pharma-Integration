@@ -1,5 +1,6 @@
 package br.com.symbiosyssolucoes.PharmaIntegration.services;
 
+import br.com.symbiosyssolucoes.PharmaIntegration.entity.Invoice;
 import br.com.symbiosyssolucoes.PharmaIntegration.entity.InvoiceItem;
 import br.com.symbiosyssolucoes.PharmaIntegration.repository.InvoiceItemRepository;
 
@@ -18,10 +19,7 @@ public class InvoiceItemService {
     }
 
 
-    private void insertInvoiceItem(InvoiceItem invoiceItem){
-        this.invoiceItemRepository.save(invoiceItem);
 
-    }
 
     private Optional<InvoiceItem> listInvoiceItemById(long id){
 

@@ -1,42 +1,44 @@
 package br.com.symbiosyssolucoes.PharmaIntegration.services;
 
-import br.com.symbiosyssolucoes.PharmaIntegration.entity.ConnectionsTypes;
 import br.com.symbiosyssolucoes.PharmaIntegration.entity.Invoice;
 import br.com.symbiosyssolucoes.PharmaIntegration.repository.InvoiceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
+
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class InvoiceService {
 
+    @Autowired
     private InvoiceRepository invoiceRepository;
 
-    public InvoiceService(InvoiceRepository invoiceRepository){
-        this.invoiceRepository = invoiceRepository;
-    }
 
-    private Optional<Invoice> listInvoiceById(Long id){
+    public Optional<Invoice> listInvoiceById(Long id){
 
         Optional<Invoice> invoice = this.invoiceRepository.findById(id);
 
         return invoice;
     }
 
-    private Optional<List<Invoice>> listInvoices(){
+    public List<Invoice> listInvoices(){
+        Iterable<Invoice> invoices = this.invoiceRepository.findAll();
 
-        Optional<List<Invoice>> invoices = Optional.ofNullable(this.invoiceRepository.findAll());
-        return  invoices;
+        return (List<Invoice>) invoices;
     }
 
 
 
 
 
-    private void insertInvoice(Invoice invoice){
+    public Invoice insertInvoice(Invoice invoice){
         this.invoiceRepository.save(invoice);
 
+        return invoice;
     }
 
 }

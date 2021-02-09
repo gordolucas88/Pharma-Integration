@@ -1,19 +1,14 @@
-package br.com.symbiosyssolucoes.PharmaIntegration.entity;
+package br.com.symbiosyssolucoes.PharmaIntegration.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InvoiceItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class InvoiceItemDto {
     private Long Id;
     private String ItemCode;
     private Double Quantity;
@@ -26,6 +21,5 @@ public class InvoiceItem {
     private String SituacaoItemPedido;
     private Long IdItemPedidoPalm;
     private String IdItemConsys;
-
 
 }

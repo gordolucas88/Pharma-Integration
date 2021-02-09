@@ -2,63 +2,39 @@ package br.com.symbiosyssolucoes.PharmaIntegration;
 
 
 import br.com.symbiosyssolucoes.PharmaIntegration.entity.Connections;
+import br.com.symbiosyssolucoes.PharmaIntegration.entity.Invoice;
 import br.com.symbiosyssolucoes.PharmaIntegration.services.ConnectionsService;
-import br.com.symbiosyssolucoes.PharmaIntegration.services.Files;
-import br.com.symbiosyssolucoes.PharmaIntegration.services.FtpConnection;
-import org.springframework.boot.CommandLineRunner;
+import br.com.symbiosyssolucoes.PharmaIntegration.services.FileService;
+import br.com.symbiosyssolucoes.PharmaIntegration.services.FtpService;
+import br.com.symbiosyssolucoes.PharmaIntegration.services.InvoiceService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
-public class PharmaIntegrationApplication implements CommandLineRunner {
+public class PharmaIntegrationApplication {
 
-	private FtpConnection ftpConnection;
+	private FtpService ftpService;
 	private ConnectionsService connectionsService;
-	private Files files;
+	private FileService fileService;
+	private InvoiceService invoiceService;
 
-	public PharmaIntegrationApplication(FtpConnection ftpConnection, ConnectionsService connectionsService, Files files){
-		this.ftpConnection = ftpConnection;
+
+	public PharmaIntegrationApplication(FtpService ftpService, ConnectionsService connectionsService, FileService fileService, InvoiceService invoiceService){
+		this.ftpService = ftpService;
 		this.connectionsService = connectionsService;
-		this.files = files;
+		this.fileService = fileService;
+		this.invoiceService = invoiceService;
+
 	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(PharmaIntegrationApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		Boolean isTrue = true;
-		Scanner scanner = new Scanner(System.in);
 
-		while (isTrue) {
-			System.out.println("Qual entidade você deseja interagir?");
-			System.out.println("0 - Sair");
-			System.out.println("1 - FTP");
-			System.out.println("2 - Conexões");
-			System.out.println("3 - Arquivos");
-
-
-			int opcao = scanner.nextInt();
-
-			switch (opcao) {
-				case  1:
-					this.ftpConnection.menu(scanner);
-					break;
-				case 2:
-					this.connectionsService.menu(scanner);
-					break;
-				case 3:
-					this.files.menu(scanner);
-					break;
-				default:
-					isTrue = false;
-					break;
-			}
-		}
-
-	}
 
 }

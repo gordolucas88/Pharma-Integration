@@ -1,5 +1,6 @@
 package br.com.symbiosyssolucoes.PharmaIntegration.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +17,14 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(indexes = {@Index(name = "registro_duplicado", columnList = "number,customercnpj", unique = true)})
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     @Column(length = 20)
     private String CustomerCNPJ;
-    @Column(nullable = false)
+   // @Column(nullable = false)
     private String Number;
     private LocalDate Date;
     private String PurchaseType;
@@ -35,15 +37,13 @@ public class Invoice {
     private String Status;
     private Long IdPedidoPalm;
 
-    @OneToOne
-    private Company company;
+    @ManyToOne()
+    Connections connections;
 
-    @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)//(mappedBy = "invoice", fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id",  referencedColumnName = "id")
     private List<InvoiceItem> items;
 
-    @ManyToOne
-    @JoinColumn(name = "origin_id", nullable = false)
-    private Connections connections;
 
 
 }

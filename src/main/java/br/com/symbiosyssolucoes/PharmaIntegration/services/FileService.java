@@ -21,49 +21,9 @@ import java.util.*;
 @Data
 
 @Service
-public class Files {
+public class FileService {
 
 
-
-
-    public void menu(Scanner scanner) throws IOException {
-        Boolean isTrue = true;
-
-        while (isTrue) {
-            System.out.println("Qual ação você quer executar?");
-            System.out.println("0 - Voltar ao menu anterior");
-            System.out.println("1 - Listar arquivos");
-            System.out.println("2 - Mover Arquivo");
-            System.out.println("3 - Ler Arquivo");
-            System.out.println("4 - Teste EMS");
-            System.out.println("5 - Teste Consys");
-
-            int opcao = scanner.nextInt();
-
-            switch (opcao) {
-                case 1:
-                    this.listFile("C:\\Symbiosys\\ped\\");
-                    break;
-                case 2:
-                    this.moveFile("C:\\Symbiosys\\ped\\teste.txt","C:\\Symbiosys\\imp\\teste.txt");
-                    break;
-                case 3:
-                    this.readFile("C:\\Symbiosys\\ped\\1.txt");
-                    break;
-                case 4:
-                    this.toEms("C:\\Symbiosys\\ped\\1.txt");
-                    break;
-                case 5:
-                    this.toConsys("C:\\Symbiosys\\ped\\2.PED");
-                    break;
-                default:
-                    isTrue = false;
-                    break;
-
-            }
-        }
-        System.out.println();
-    }
 
 
     public String[] listFile(String path) {
@@ -133,7 +93,7 @@ public class Files {
 
         List<InvoiceItem> items = new ArrayList<InvoiceItem>();
         if(file.exists() != true) {
-            System.out.println("Nao existe o arquivo solicitado");
+            System.out.println("Nao existe o arquivo solicitado FILE SERVICE");
 
         } else {
 
@@ -147,7 +107,7 @@ public class Files {
                     if(Integer.parseInt(line.substring(0,1)) == 1){
                       try {
 
-                          pedido.setCustomerCNPJ(line.substring(1,15));
+                          pedido.setCustomerCNPJ(line.substring(2,16));
                           pedido.setNumber(line.substring(16,28).trim());
                           int year = Integer.parseInt(line.substring(32,36));
                           int month = Integer.parseInt(line.substring(30,32));

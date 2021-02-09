@@ -26,48 +26,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Transactional
-public class FtpConnection {
+public class FtpService {
 
     @Autowired
     private ConnectionsRepository connectionsRepository;
     private FTPClient ftp;
 
 
-
-
-    public void menu(Scanner scanner) throws IOException {
-        Boolean isTrue = true;
-
-        while (isTrue) {
-            System.out.println("Qual ação você quer executar?");
-            System.out.println("0 - Voltar ao menu anterior");
-            System.out.println("1 - Subir Arquivos");
-            System.out.println("2 - Baixar Arquivos");
-
-
-            int opcao = scanner.nextInt();
-
-            switch (opcao) {
-                case 1:
-                    this.putFileToPath(2L);
-                    break;
-                case 2:
-                    this.downloadAndRemoveFile(2L);
-                    break;
-                default:
-                    isTrue = false;
-                    break;
-
-            }
-        }
-        System.out.println();
-    }
-
-
-
-
-
-    private void putFileToPath(Long id) throws SocketException, IOException {
+    public void putFileToPath(Long id) throws SocketException, IOException {
 
         Optional<Connections> optional = this.connectionsRepository.findById(id);
 
@@ -116,7 +82,7 @@ public class FtpConnection {
 
 
 
-    private void downloadAndRemoveFile(Long id) throws SocketException, IOException {{
+    public void downloadAndRemoveFile(Long id) throws SocketException, IOException {{
         Optional<Connections> optional = this.connectionsRepository.findById(id);
 
         if( optional.isPresent()){

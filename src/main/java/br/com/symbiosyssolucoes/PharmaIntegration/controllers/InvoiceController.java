@@ -34,7 +34,7 @@ public class InvoiceController {
 
 
     @GetMapping("/invoice/new")
-    public ResponseEntity<List<Invoice>> insertInvoice(Invoice invoice){
+    public ResponseEntity<String> insertInvoice(Invoice invoice){
 
 
         ConnectionsService connectionsService = null;
@@ -109,7 +109,7 @@ public class InvoiceController {
 
 
                 }
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok().body(new String("Recebido!"));
 
             } else {
                 return ResponseEntity.notFound().build();

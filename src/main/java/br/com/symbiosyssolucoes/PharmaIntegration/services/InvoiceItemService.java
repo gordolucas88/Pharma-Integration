@@ -21,10 +21,15 @@ public class InvoiceItemService {
 
 
 
-    private Optional<InvoiceItem> listInvoiceItemById(long id){
+    public Optional<InvoiceItem> listInvoiceItemById(Long id){
 
         Optional<InvoiceItem> invoiceItem = this.invoiceItemRepository.findById(id);
         return invoiceItem;
+    }
+
+    public void updateItem(InvoiceItem invoiceItem){
+
+        this.invoiceItemRepository.save(invoiceItem);
     }
 
 }

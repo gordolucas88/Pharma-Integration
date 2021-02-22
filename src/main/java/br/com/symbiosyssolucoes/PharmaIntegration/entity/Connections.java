@@ -31,7 +31,6 @@ public class Connections {
 
 
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
-//    @JoinColumn(name = "connection_id",  referencedColumnName = "id")
-//    private List<Invoice> invoices;
+    @OneToMany(mappedBy = "connections", fetch = FetchType.LAZY)
+    private List<Invoice> invoices;
 }

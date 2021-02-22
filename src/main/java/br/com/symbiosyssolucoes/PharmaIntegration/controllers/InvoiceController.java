@@ -3,13 +3,13 @@ package br.com.symbiosyssolucoes.PharmaIntegration.controllers;
 import br.com.symbiosyssolucoes.PharmaIntegration.dto.InvoiceDto;
 import br.com.symbiosyssolucoes.PharmaIntegration.entity.Connections;
 import br.com.symbiosyssolucoes.PharmaIntegration.entity.Invoice;
+import br.com.symbiosyssolucoes.PharmaIntegration.entity.InvoiceItem;
 import br.com.symbiosyssolucoes.PharmaIntegration.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,9 +32,9 @@ public class InvoiceController {
     private InvoiceItemService invoiceItemService;
 
 
-
+    @Transactional
     @GetMapping("/invoice/new")
-    public ResponseEntity<String> insertInvoice(Invoice invoice){
+    public ResponseEntity<List<InvoiceDto>> insertInvoice(Invoice invoice){
 
 
         ConnectionsService connectionsService = null;
@@ -42,13 +42,14 @@ public class InvoiceController {
 
             if(optionalConnections.isPresent()){
                 List<Connections> connectionsList = optionalConnections.get();
+                List<Invoice> insertedInvoicesList = new ArrayList<Invoice>();
                 for(int i = 0; i < connectionsList.size(); i++){
                     System.out.println("Entrou no loop de conexao " + i);
                     Connections connections = connectionsList.get(i);
 
                     try {
                         this.ftpService.downloadAndRemoveFile(connections.getId());
-                        List<Invoice> insertedInvoicesList = new ArrayList<Invoice>();
+
                         String[] filesToImport = this.fileService.listFile(connections.getLocalPedPath());
 
                         String destinationFolder = connections.getLocalImpPath();
@@ -109,7 +110,13 @@ public class InvoiceController {
 
 
                 }
-                return ResponseEntity.ok().body(new String("Recebido!"));
+
+                List<InvoiceDto> invoiceDtoList = new ArrayList<InvoiceDto>();
+                insertedInvoicesList.forEach(invoice1 -> {
+                    invoiceDtoList.add(new InvoiceDto().toDto(invoice1));
+                });
+
+                return ResponseEntity.ok().body(invoiceDtoList);
 
             } else {
                 return ResponseEntity.notFound().build();
@@ -122,7 +129,6 @@ public class InvoiceController {
 
 
     @GetMapping("/invoices")
-
     public  ResponseEntity<List<InvoiceDto>> invoiceList(){
 
 
@@ -155,6 +161,43 @@ public class InvoiceController {
 
             return ResponseEntity.notFound().build();
         }
+
+
+
+
+    }
+
+    @PutMapping("/invoices/status")
+    public ResponseEntity<InvoiceDto>  updateInvoiceList(@RequestBody InvoiceDto inserted){
+
+
+            Optional<Invoice> optional = this.invoiceService.listInvoiceById(inserted.getId());
+            if(optional.isPresent()){
+                Invoice invoice = optional.get();
+
+                invoice.setIdPedidoPalm(inserted.getIdPedidoPalm());
+                invoice.setStatus(inserted.getStatus());
+
+                inserted.getItems().forEach(item -> {
+                    Optional<InvoiceItem> optionalInvoiceItem = this.invoiceItemService.listInvoiceItemById(item.getId());
+
+                    if(optionalInvoiceItem.isPresent()){
+                        InvoiceItem invoiceItem = optionalInvoiceItem.get();
+
+                        invoiceItem.setIdItemPedidoPalm(item.getIdItemPedidoPalm());
+                        invoiceItem.setItemStatus(item.getItemStatus());
+
+                        this.invoiceItemService.updateItem(invoiceItem);
+
+                    }
+                });
+
+                return ResponseEntity.ok().body(new InvoiceDto().toDto(invoice));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+
+
 
 
 

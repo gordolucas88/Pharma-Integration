@@ -84,5 +84,53 @@ public class InvoiceDto {
 
     }
 
+    public Invoice dtoToinvoice(InvoiceDto invoiceDto){
+
+        Invoice invoice = new Invoice();
+
+        invoice.setId(invoiceDto.getId());
+        invoice.setCustomerCNPJ(invoiceDto.getCustomerCNPJ());
+        invoice.setNumber(invoiceDto.getNumber());
+        invoice.setDate(invoiceDto.getDate());
+        invoice.setReturnType(invoiceDto.getReturnType());
+        invoice.setPaymentTerms(invoiceDto.getPaymentTerms());
+        invoice.setCustomerInvoiceNumber(invoiceDto.getCustomerInvoiceNumber());
+        invoice.setDeadline(invoiceDto.getDeadline());
+        invoice.setAgentCode(invoiceDto.getAgentCode());
+        invoice.setOperationDate(invoiceDto.getOperationDate());
+        invoice.setStatus(invoiceDto.getStatus());
+        invoice.setIdPedidoPalm(invoiceDto.getIdPedidoPalm());
+
+        List<InvoiceItem> invoiceItems = new ArrayList<InvoiceItem>();
+
+        invoiceDto.getItems().forEach(itemDto -> {
+
+            InvoiceItem item = new InvoiceItem();
+
+            item.setId(itemDto.getId());
+            item.setItemCode(itemDto.getItemCode());
+            item.setQuantity(itemDto.getQuantity());
+            item.setDiscount(itemDto.getDiscount());
+            item.setPaymentTerms(itemDto.getPaymentTerms());
+            item.setInstallment(itemDto.getInstallment());
+            item.setDiscountType(itemDto.getDiscountType());
+            item.setInstallmentType(itemDto.getInstallmentType());
+            item.setItemStatus(itemDto.getItemStatus());
+            item.setSituacaoItemPedido(itemDto.getSituacaoItemPedido());
+            item.setIdItemPedidoPalm(itemDto.getIdItemPedidoPalm());
+            item.setIdItemConsys(itemDto.getIdItemConsys());
+
+            invoiceItems.add(item);
+
+        });
+
+        invoice.setItems(invoiceItems);
+
+        return invoice;
+
+
+
+    }
+
 
 }

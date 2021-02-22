@@ -22,9 +22,10 @@ public class ConnectionController {
     public ResponseEntity<Connections> insert(@RequestBody Connections request) {
 
 
-        System.out.println(request);
+
         Connections connections = connectionsService.insertConnections(request);
         connections.setDescription(request.getDescription());
+        connections.setPassword("*****");
 
 
 

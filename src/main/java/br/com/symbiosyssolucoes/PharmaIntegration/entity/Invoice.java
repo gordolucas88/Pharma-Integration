@@ -37,7 +37,7 @@ public class Invoice {
     private String Status;
     private Long IdPedidoPalm;
 
-    @ManyToOne()
+    @ManyToOne
     Connections connections;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)//(mappedBy = "invoice", fetch = FetchType.LAZY)

@@ -180,7 +180,11 @@ public class InvoiceController {
 
                 inserted.getItems().forEach(item -> {
                     Optional<InvoiceItem> optionalInvoiceItem = this.invoiceItemService.listInvoiceItemById(item.getId());
-
+                    System.out.println();
+                    System.out.println();
+                    System.out.println(item);
+                    System.out.println();
+                    System.out.println();
                     if(optionalInvoiceItem.isPresent()){
                         InvoiceItem invoiceItem = optionalInvoiceItem.get();
 

@@ -1,12 +1,10 @@
 package br.com.symbiosyssolucoes.PharmaIntegration.services;
 
-import br.com.symbiosyssolucoes.PharmaIntegration.entity.Invoice;
 import br.com.symbiosyssolucoes.PharmaIntegration.entity.InvoiceItem;
 import br.com.symbiosyssolucoes.PharmaIntegration.repository.InvoiceItemRepository;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

@@ -7,10 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,95 +36,35 @@ public class InvoiceDto {
     private List<InvoiceItemDto> Items;
 
 
-    public InvoiceDto toDto(Invoice invoice) {
-        InvoiceDto invoiceDto = new InvoiceDto();
-        invoiceDto.setId(invoice.getId());
-        invoiceDto.setCustomerCNPJ(invoice.getCustomerCNPJ());
-        invoiceDto.setNumber(invoice.getNumber());
-        invoiceDto.setDate(invoice.getDate());
-        invoiceDto.setPurchaseType(invoice.getPurchaseType());
-        invoiceDto.setReturnType(invoice.getReturnType());
-        invoiceDto.setPaymentTerms(invoice.getPaymentTerms());
-        invoiceDto.setCustomerInvoiceNumber(invoice.getCustomerInvoiceNumber());
-        invoiceDto.setDeadline(invoice.getDeadline());
-        invoiceDto.setAgentCode(invoice.getAgentCode());
-        invoiceDto.setOperationDate(invoice.getOperationDate());
-        invoiceDto.setStatus(invoice.getStatus());
-        invoiceDto.setIdPedidoPalm(invoice.getIdPedidoPalm());
-        invoiceDto.setConnectionType(invoice.getConnections().getOrigin().toString());
+    public InvoiceDto (Invoice invoice) {
 
-        List<InvoiceItemDto> itemsDtoList = new ArrayList<InvoiceItemDto>();
+        this.setId(invoice.getId());
+        this.setCustomerCNPJ(invoice.getCustomerCNPJ());
+        this.setNumber(invoice.getNumber());
+        this.setDate(invoice.getDate());
+        this.setPurchaseType(invoice.getPurchaseType());
+        this.setReturnType(invoice.getReturnType());
+        this.setPaymentTerms(invoice.getPaymentTerms());
+        this.setCustomerInvoiceNumber(invoice.getCustomerInvoiceNumber());
+        this.setDeadline(invoice.getDeadline());
+        this.setAgentCode(invoice.getAgentCode());
+        this.setOperationDate(invoice.getOperationDate());
+        this.setStatus(invoice.getStatus());
+        this.setIdPedidoPalm(invoice.getIdPedidoPalm());
+        this.setConnectionType(invoice.getConnections().getOrigin().toString());
 
-        invoice.getItems().forEach(item -> {
-            InvoiceItemDto itemDto = new InvoiceItemDto();
-            itemDto.setId(item.getId());
-            itemDto.setItemCode(item.getItemCode());
-            itemDto.setQuantity(item.getQuantity());
-            itemDto.setDiscount(item.getDiscount());
-            itemDto.setPaymentTerms(item.getPaymentTerms());
-            itemDto.setInstallment(item.getInstallment());
-            itemDto.setDiscountType(item.getDiscountType());
-            itemDto.setInstallmentType(item.getInstallmentType());
-            itemDto.setItemStatus(item.getItemStatus());
-            itemDto.setSituacaoItemPedido(item.getSituacaoItemPedido());
-            itemDto.setIdItemPedidoPalm(item.getIdItemPedidoPalm());
-            itemDto.setIdItemConsys(item.getIdItemConsys());
+        if(invoice.getItems().size() > 0) {
+            List<InvoiceItemDto> itemsDtoList = new ArrayList<InvoiceItemDto>();
 
-            itemsDtoList.add(itemDto);
+            invoice.getItems().forEach(item -> {
+                InvoiceItemDto itemDto = new InvoiceItemDto(item);
 
-        });
+                itemsDtoList.add(itemDto);
 
-        invoiceDto.setItems(itemsDtoList);
+            });
 
-        return invoiceDto;
-
-
-    }
-
-    public Invoice dtoToinvoice(InvoiceDto invoiceDto){
-
-        Invoice invoice = new Invoice();
-
-        invoice.setId(invoiceDto.getId());
-        invoice.setCustomerCNPJ(invoiceDto.getCustomerCNPJ());
-        invoice.setNumber(invoiceDto.getNumber());
-        invoice.setDate(invoiceDto.getDate());
-        invoice.setReturnType(invoiceDto.getReturnType());
-        invoice.setPaymentTerms(invoiceDto.getPaymentTerms());
-        invoice.setCustomerInvoiceNumber(invoiceDto.getCustomerInvoiceNumber());
-        invoice.setDeadline(invoiceDto.getDeadline());
-        invoice.setAgentCode(invoiceDto.getAgentCode());
-        invoice.setOperationDate(invoiceDto.getOperationDate());
-        invoice.setStatus(invoiceDto.getStatus());
-        invoice.setIdPedidoPalm(invoiceDto.getIdPedidoPalm());
-
-        List<InvoiceItem> invoiceItems = new ArrayList<InvoiceItem>();
-
-        invoiceDto.getItems().forEach(itemDto -> {
-
-            InvoiceItem item = new InvoiceItem();
-
-            item.setId(itemDto.getId());
-            item.setItemCode(itemDto.getItemCode());
-            item.setQuantity(itemDto.getQuantity());
-            item.setDiscount(itemDto.getDiscount());
-            item.setPaymentTerms(itemDto.getPaymentTerms());
-            item.setInstallment(itemDto.getInstallment());
-            item.setDiscountType(itemDto.getDiscountType());
-            item.setInstallmentType(itemDto.getInstallmentType());
-            item.setItemStatus(itemDto.getItemStatus());
-            item.setSituacaoItemPedido(itemDto.getSituacaoItemPedido());
-            item.setIdItemPedidoPalm(itemDto.getIdItemPedidoPalm());
-            item.setIdItemConsys(itemDto.getIdItemConsys());
-
-            invoiceItems.add(item);
-
-        });
-
-        invoice.setItems(invoiceItems);
-
-        return invoice;
-
+            this.setItems(itemsDtoList);
+        }
 
 
     }

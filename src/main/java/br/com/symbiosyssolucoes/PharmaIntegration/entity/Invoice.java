@@ -1,5 +1,6 @@
 package br.com.symbiosyssolucoes.PharmaIntegration.entity;
 
+import br.com.symbiosyssolucoes.PharmaIntegration.dto.InvoiceDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,7 +26,7 @@ public class Invoice {
     private Long Id;
     @Column(length = 20)
     private String CustomerCNPJ;
-   // @Column(nullable = false)
+
     private String Number;
     private LocalDate Date;
     private String PurchaseType;
@@ -44,6 +46,40 @@ public class Invoice {
     @JoinColumn(name = "invoice_id",  referencedColumnName = "id")
     private List<InvoiceItem> items;
 
+    public Invoice (InvoiceDto invoiceDto){
+
+        this.setId(invoiceDto.getId());
+        this.setCustomerCNPJ(invoiceDto.getCustomerCNPJ());
+        this.setNumber(invoiceDto.getNumber());
+        this.setDate(invoiceDto.getDate());
+        this.setReturnType(invoiceDto.getReturnType());
+        this.setPaymentTerms(invoiceDto.getPaymentTerms());
+        this.setCustomerInvoiceNumber(invoiceDto.getCustomerInvoiceNumber());
+        this.setDeadline(invoiceDto.getDeadline());
+        this.setAgentCode(invoiceDto.getAgentCode());
+        this.setOperationDate(invoiceDto.getOperationDate());
+        this.setStatus(invoiceDto.getStatus());
+        this.setIdPedidoPalm(invoiceDto.getIdPedidoPalm());
+
+        if(invoiceDto.getItems().size() > 0) {
+
+            List<InvoiceItem> invoiceItems = new ArrayList<InvoiceItem>();
+
+            invoiceDto.getItems().forEach(itemDto -> {
+
+                InvoiceItem item = new InvoiceItem(itemDto);
+
+                invoiceItems.add(item);
+
+            });
+
+            this.setItems(invoiceItems);
+        }
+
+
+
+
+    }
 
 
 }

@@ -22,7 +22,7 @@ public class CompanyService {
 
     }
 
-    private Optional<Company> listCompanyById(Long id){
+    public Optional<Company> listCompanyById(Long id){
 
         Optional<Company> company = this.companyRepository.findById(id);
 

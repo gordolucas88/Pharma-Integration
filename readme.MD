@@ -4,8 +4,8 @@
 
 * API feita 100% em Java com o uso do Spring e Hibernate.
 
-A função da mesma é analisar se existe arquivos de pedido em diretórios FTP, converter os mesmo e persistir em banco de dados (SQL Server).
-Após a persistência devolvemos esse dados em formato json para a API solicitante.
+A função da mesma é analisar se existem arquivos de pedido em diretório FTP, converter os mesmo e persistir em banco de dados (MSSQL).
+Após a persistência devolvemos esses dados em formato json para a API solicitante.
 
 ### Layouts Configurados.
 
@@ -18,4 +18,4 @@ Caso tenha interesse de usar ou ajudar no desenvolvimento do projeto, pode entra
 
 ## Licença.
 
-Esse projeto segue a politíca de licença MIT.
+Esse projeto segue a política de licença MIT.

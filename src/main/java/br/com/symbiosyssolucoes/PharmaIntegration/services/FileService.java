@@ -5,15 +5,11 @@ import br.com.symbiosyssolucoes.PharmaIntegration.entity.Invoice;
 import br.com.symbiosyssolucoes.PharmaIntegration.entity.InvoiceItem;
 
 import lombok.Data;
-import org.springframework.core.type.filter.RegexPatternTypeFilter;
+
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.io.BufferedReader;
-import java.io.File;
+import java.io.*;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -266,6 +262,29 @@ public class FileService {
 
 
     }
+
+    public void mkFile(String filePathName, String content) throws IOException {
+
+      File file = new File(filePathName);
+      if(file.exists() == true){
+          System.out.println("Arquivo Solicitado já existe no diretório");
+          return;
+      } else {
+
+          try {
+              BufferedWriter buffWrite = new BufferedWriter(new FileWriter(filePathName));
+              buffWrite.append(content);
+              buffWrite.close();
+          } catch (IOException e){
+              System.out.println("Algo deu errado");
+          }
+
+      }
+
+      }
+
+
+
 
 
 }

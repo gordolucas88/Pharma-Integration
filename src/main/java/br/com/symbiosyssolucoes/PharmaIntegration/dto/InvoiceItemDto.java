@@ -1,5 +1,6 @@
 package br.com.symbiosyssolucoes.PharmaIntegration.dto;
 
+import br.com.symbiosyssolucoes.PharmaIntegration.entity.InvoiceItem;
 import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,23 @@ public class InvoiceItemDto {
     private String SituacaoItemPedido;
     private Long IdItemPedidoPalm;
     private String IdItemConsys;
+
+
+    public InvoiceItemDto (InvoiceItem invoiceItem){
+
+        this.setId(invoiceItem.getId());
+        this.setItemCode(invoiceItem.getItemCode());
+        this.setQuantity(invoiceItem.getQuantity());
+        this.setDiscount(invoiceItem.getDiscount());
+        this.setPaymentTerms(invoiceItem.getPaymentTerms());
+        this.setInstallment(invoiceItem.getInstallment());
+        this.setDiscountType(invoiceItem.getDiscountType());
+        this.setInstallmentType(invoiceItem.getInstallmentType());
+        this.setItemStatus(invoiceItem.getItemStatus());
+        this.setSituacaoItemPedido(invoiceItem.getSituacaoItemPedido());
+        this.setIdItemPedidoPalm(invoiceItem.getIdItemPedidoPalm());
+        this.setIdItemConsys(invoiceItem.getIdItemConsys());
+
+    }
 
 }

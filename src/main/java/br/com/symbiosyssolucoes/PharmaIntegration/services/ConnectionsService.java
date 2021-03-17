@@ -33,11 +33,14 @@ public class ConnectionsService {
 
     }
 
-    public void listConnectionsById(Long id){
+    public Connections listConnectionsById(Long id){
 
-        Optional<Connections> connections = this.connectionsRepository.findById(id);
-
-        System.out.println(connections.toString());
+        Optional<Connections> optional = this.connectionsRepository.findById(id);
+        if(optional.isPresent()){
+            Connections connections = optional.get();
+            return connections;
+        }
+        return new Connections();
     }
 
 

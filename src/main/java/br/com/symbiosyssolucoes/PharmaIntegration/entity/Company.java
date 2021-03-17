@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Long Id;
     @Column(nullable = false)
     private Integer GroupCode;
     @Column(nullable = false)

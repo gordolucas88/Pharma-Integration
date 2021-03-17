@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +33,8 @@ public class InvoiceController {
 
 
     @Transactional
-    @GetMapping("/invoice/new")
-    public ResponseEntity<List<InvoiceDto>> insertInvoice(Invoice invoice){
+    @GetMapping("/import")
+    public ResponseEntity<List<InvoiceDto>> insertInvoice(){
 
 
         ConnectionsService connectionsService = null;
@@ -104,16 +104,16 @@ public class InvoiceController {
 
                     } catch (IOException e){
                         e.printStackTrace();
+                        return ResponseEntity.notFound().build();
 
                     }
-
 
 
                 }
 
                 List<InvoiceDto> invoiceDtoList = new ArrayList<InvoiceDto>();
                 insertedInvoicesList.forEach(invoice1 -> {
-                    invoiceDtoList.add(new InvoiceDto().toDto(invoice1));
+                    invoiceDtoList.add(new InvoiceDto(invoice1));
                 });
 
                 return ResponseEntity.ok().body(invoiceDtoList);
@@ -137,9 +137,9 @@ public class InvoiceController {
              List<InvoiceDto> invoiceDtoList = new ArrayList<InvoiceDto>();
 
              invoiceList.forEach(invoice -> {
-                 InvoiceDto invoiceDto = new InvoiceDto();
+                 InvoiceDto invoiceDto = new InvoiceDto(invoice);
 
-                 invoiceDtoList.add(invoiceDto.toDto(invoice));
+                 invoiceDtoList.add(invoiceDto);
 
              });
 
@@ -150,7 +150,7 @@ public class InvoiceController {
 
     }
 
-    @GetMapping("/invoices/{id}")
+    @GetMapping("/invoice/{id}")
     public ResponseEntity<Invoice> listById(@PathVariable Long id){
 
         Optional<Invoice> optional = this.invoiceService.listInvoiceById(id);
@@ -167,7 +167,7 @@ public class InvoiceController {
 
     }
 
-    @PutMapping("/invoices/status")
+    @PutMapping("/invoice/status")
     public ResponseEntity<InvoiceDto>  updateInvoiceList(@RequestBody InvoiceDto inserted){
 
 
@@ -196,7 +196,7 @@ public class InvoiceController {
                     }
                 });
 
-                return ResponseEntity.ok().body(new InvoiceDto().toDto(invoice));
+                return ResponseEntity.ok().body(new InvoiceDto(invoice));
             } else {
                 return ResponseEntity.notFound().build();
             }

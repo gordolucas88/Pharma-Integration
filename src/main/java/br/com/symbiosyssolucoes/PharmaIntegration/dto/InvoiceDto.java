@@ -35,6 +35,9 @@ public class InvoiceDto {
 
     private List<InvoiceItemDto> Items;
 
+    private String PedidoReturnFile;
+    private String NFReturnFile;
+    private String PedidoCanceladoReturnFile;
 
     public InvoiceDto (Invoice invoice) {
 

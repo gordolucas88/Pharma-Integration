@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -30,7 +31,7 @@ public class ReturnService {
     private ConnectionsService conn;
 
 
-    public PedidoPalm emsReturn(PedidoPalm pedidoPalm){
+    public PedidoPalm emsReturn(PedidoPalm pedidoPalm) throws NoSuchElementException {
 
         String date = LocalDateTime.now().toString();
         String dateOp = pedidoPalm.getDataOperacao().toString();
@@ -42,14 +43,22 @@ public class ReturnService {
         String R1 = "1" + "0" + pedidoPalm.getCnpjCpfCliFor() + StringUtils.rightPad(pedidoPalm.getNumPedidoPalm(),12, " ") + dateOp.substring(8,10) + dateOp.substring(5,7) + dateOp.substring(0,4) +
                 dateOp.substring(11,13) + dateOp.substring(14,16) + dateOp.substring(17,19) + dateOp.substring(20,22) +
                 pedidoPalm.getNumPedidoCRONOS() + pedidoPalm.getCodRetorno() + "\n" ;
-        String R2 = "";
+        StringBuilder R2 = new StringBuilder();
+
         for(int i = 0; i < pedidoPalm.getItemPedidoPalmList().size(); i++){
+
             ItemPedidoPalm item = pedidoPalm.getItemPedidoPalmList().get(i);
-            R2 += "2" + item.getCodProdutoArq() + StringUtils.rightPad(pedidoPalm.getNumPedidoPalm(),12, " ") + "0" + StringUtils.leftPad(item.getQtdConfirmada().toString(),5,"0")
-                    + item.getPercDescontoItem().toString().replace(".", "")
-                    + "00030"
-                    + StringUtils.leftPad(item.qtdNaoAtendida().toString(), 5, "0") +
-                item.getCodRetornoItem() + item.getDscRetornoItem().trim() + "\n";
+            R2.append("2")
+                    .append(item.getCodProdutoArq())
+                    .append(StringUtils.rightPad(pedidoPalm.getNumPedidoPalm(), 12, " "))
+                    .append("0")
+                    .append(StringUtils.leftPad(item.getQtdConfirmada().toString().replace(".",""), 5, "0"))
+                    .append(item.getPercDescontoItem().toString().replace(".", ""))
+                    .append("00030")
+                    .append(StringUtils.leftPad(item.qtdNaoAtendida().toString().replace(".",""), 5, "0"))
+                    .append(item.getCodRetornoItem())
+                    .append(item.getDscRetornoItem().trim())
+                    .append("\n");
         }
         String lines = R0+R1+R2;
         String R3 = "3" + StringUtils.rightPad(pedidoPalm.getNumPedidoPalm(),12, " ") + StringUtils.leftPad(String.valueOf((StringUtils.countMatches(lines,"\n") + 1)),5, "0")
@@ -60,8 +69,9 @@ public class ReturnService {
 
         Connections connections = this.conn.listConnectionsById(1L);
         try {
+            Thread.sleep(1000);
             this.file.mkFile(connections.getLocalRetPath() + filename, file);
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 

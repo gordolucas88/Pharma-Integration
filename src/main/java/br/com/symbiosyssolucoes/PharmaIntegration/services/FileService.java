@@ -276,7 +276,7 @@ public class FileService {
               buffWrite.append(content);
               buffWrite.close();
           } catch (IOException e){
-              System.out.println("Algo deu errado");
+              e.printStackTrace();
           }
 
       }

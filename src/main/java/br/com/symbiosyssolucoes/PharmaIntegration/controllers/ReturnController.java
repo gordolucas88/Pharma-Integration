@@ -6,10 +6,10 @@ import br.com.symbiosyssolucoes.PharmaIntegration.services.ReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.NoSuchElementException;
 
 
 @Controller
@@ -24,8 +24,15 @@ public class ReturnController {
 
 
         if(pedidoPalm.getOrigem().equals("EMS")){
-            PedidoPalm retorno = this.returnService.emsReturn(pedidoPalm);
-            return ResponseEntity.ok().body(retorno);
+            try{
+                PedidoPalm retorno = this.returnService.emsReturn(pedidoPalm);
+                return ResponseEntity.ok().body(retorno);
+            } catch (NoSuchElementException ne) {
+
+                return ResponseEntity.notFound().build();
+            }
+
+
 
         }
 

@@ -110,8 +110,15 @@ public class InvoiceController {
 
 
                 }
-
                 List<InvoiceDto> invoiceDtoList = new ArrayList<InvoiceDto>();
+
+                List<Invoice> invoicesNotExported = this.invoiceService.listInvoicesNotExported();
+                if(!invoicesNotExported.isEmpty()){
+                    invoicesNotExported.forEach(invoice1 -> {
+                        invoiceDtoList.add(new InvoiceDto(invoice1));
+                    });
+                }
+
                 insertedInvoicesList.forEach(invoice1 -> {
                     invoiceDtoList.add(new InvoiceDto(invoice1));
                 });
@@ -119,7 +126,10 @@ public class InvoiceController {
                 return ResponseEntity.ok().body(invoiceDtoList);
 
             } else {
+
                 return ResponseEntity.notFound().build();
+
+
             }
 
 
@@ -130,8 +140,6 @@ public class InvoiceController {
 
     @GetMapping("/invoices")
     public  ResponseEntity<List<InvoiceDto>> invoiceList(){
-
-
 
              List<Invoice> invoiceList = this.invoiceService.listInvoices();
              List<InvoiceDto> invoiceDtoList = new ArrayList<InvoiceDto>();
@@ -151,12 +159,13 @@ public class InvoiceController {
     }
 
     @GetMapping("/invoice/{id}")
-    public ResponseEntity<Invoice> listById(@PathVariable Long id){
+    public ResponseEntity<InvoiceDto> listById(@PathVariable Long id){
 
         Optional<Invoice> optional = this.invoiceService.listInvoiceById(id);
         if(optional.isPresent()) {
             Invoice invoice = optional.get();
-            return ResponseEntity.ok().body(invoice);
+            InvoiceDto invoiceDto = new InvoiceDto(invoice);
+            return ResponseEntity.ok().body(invoiceDto);
         } else {
 
             return ResponseEntity.notFound().build();

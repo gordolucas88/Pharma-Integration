@@ -23,21 +23,21 @@ import java.util.List;
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @Column(length = 20)
-    private String CustomerCNPJ;
+    private String customerCNPJ;
 
-    private String Number;
-    private LocalDate Date;
-    private String PurchaseType;
-    private String ReturnType;
-    private String PaymentTerms;
-    private String CustomerInvoiceNumber;
-    private String Deadline;
-    private String AgentCode;
-    private LocalDateTime OperationDate;
-    private String Status;
-    private Long IdPedidoPalm;
+    private String number;
+    private LocalDate date;
+    private String purchaseType;
+    private String returnType;
+    private String paymentTerms;
+    private String customerInvoiceNumber;
+    private String deadline;
+    private String agentCode;
+    private LocalDateTime operationDate;
+    private String status;
+    private Long idPedidoPalm;
 
     @ManyToOne
     Connections connections;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,17 @@ public class InvoiceService {
         this.invoiceRepository.save(invoice);
 
         return invoice;
+    }
+
+    public List<Invoice> listInvoicesNotExported(){
+        Optional<List<Invoice>> optional =  this.invoiceRepository.findByStatus("1");
+        List<Invoice> invoices = new ArrayList<>();
+        if(optional.isPresent()){
+            invoices = optional.get();
+            return invoices;
+        } else {
+            return invoices;
+        }
     }
 
 }
